@@ -31,6 +31,7 @@ $LOAD_PATH.unshift(File.dirname(__FILE__))
 require 'rspec'
 require 'rubocop'
 require 'rubocop/cli'
+require 'timeout'
 
 # disable colors in specs
 Rainbow.enabled = false
@@ -76,6 +77,12 @@ RSpec.configure do |config|
   end
 
   config.include(ExitCodeMatchers)
+
+  config.around(:each) do |example|
+    Timeout::timeout(2) do
+      example.run
+    end
+  end
 end
 
 def inspect_source_file(cop, source)

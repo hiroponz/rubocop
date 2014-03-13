@@ -319,6 +319,13 @@ describe Rubocop::CLI, :isolated_environment do
                   "parentheses for method calls with no arguments.",
                   ''].join("\n"))
       end
+
+      it 'should not freeze TrailingComma after the last parameter of a method call' do
+        create_file('example.rb',
+                    ['# encoding: utf-8',
+                     'some_method(a, )'])
+        cli.run(%w(--auto-correct))
+      end
     end
 
     describe '--auto-gen-config' do
